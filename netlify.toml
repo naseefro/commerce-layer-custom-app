@@ -1,0 +1,14 @@
+# https://docs.netlify.com/configure-builds/file-based-configuration/
+[build]
+command = "pnpm build:apps"
+publish = "dist"
+[[redirects]]
+from = "/:appSlug/*"
+to = "/:appSlug/index.html"
+status = 200
+[template.environment]
+PUBLIC_SELF_HOSTED_SLUG = "Your organization slug"
+[[headers]]
+for = "/*" # you can configure the correct paths here
+[headers.values]
+access-control-allow-origin = "*" # see a list of allowed values here: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin

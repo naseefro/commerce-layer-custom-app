@@ -1,0 +1,47 @@
+{
+  "private": true,
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "dev": "pnpm --filter index dev",
+    "build:apps": "pnpm --parallel --aggregate-output --color --filter \"app-*\" build",
+    "clean": "pnpx rimraf --glob **/node_modules **/pnpm-lock.yaml",
+    "lint": "pnpm -r lint",
+    "lint:fix": "pnpm -r lint:fix",
+    "test": "pnpm  --stream -r test",
+    "ts:check": "pnpm -r ts:check",
+    "test:watch": "pnpm -r --parallel --aggregate-output --color test:watch",
+    "dep:major": "pnpm dlx npm-check-updates --packageFile '**/package.json' -u && node replace-react.mjs",
+    "dep:minor": "pnpm dlx npm-check-updates --packageFile '**/package.json' -u -t minor && node replace-react.mjs",
+    "prepare": "husky"
+  },
+  "keywords": [],
+  "author": {
+    "name": "Commerce Layer",
+    "email": "support@commercelayer.io"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/commercelayer/dashboard-apps"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=8"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lerna": "^8.2.4",
+    "lint-staged": "^16.1.5",
+    "replace-in-file": "^8.3.0"
+  },
+  "resolutions": {
+    "axios": "^1.8.2",
+    "brace-expansion": "^2.0.2",
+    "form-data": "^4.0.4",
+    "tmp": "^0.2.4"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "version": "3.11.4",
+  "$schema": "node_modules/lerna/schemas/lerna-schema.json",
+  "useNx": false,
+  "npmClient": "pnpm",
+  "command": {
+    "version": {
+      "preid": "stg",
+      "includeMergedTags": true
+    }
+  }
+}
