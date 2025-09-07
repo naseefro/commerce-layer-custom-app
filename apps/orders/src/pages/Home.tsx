@@ -1,6 +1,6 @@
-import { makeInstructions } from '#data/filters'
-import { presets } from '#data/lists'
-import { appRoutes } from '#data/routes'
+import { makeInstructions } from "#data/filters";
+import { presets } from "#data/lists";
+import { appRoutes } from "#data/routes";
 import {
   HomePageLayout,
   List,
@@ -12,85 +12,87 @@ import {
   Text,
   useCoreSdkProvider,
   useResourceFilters,
-  useTranslation
-} from '@commercelayer/app-elements'
-import { Link, useLocation } from 'wouter'
-import { useSearch } from 'wouter/use-browser-location'
-import { useListCounters } from '../metricsApi/useListCounters'
+  useTranslation,
+} from "@commercelayer/app-elements";
+import { Link, useLocation } from "wouter";
+import { useSearch } from "wouter/use-browser-location";
+import { useListCounters } from "../metricsApi/useListCounters";
 
 function Home(): React.JSX.Element {
-  const [, setLocation] = useLocation()
-  const { t } = useTranslation()
-  const { sdkClient } = useCoreSdkProvider()
-  const search = useSearch()
-  const { data: counters, isLoading: isLoadingCounters } = useListCounters()
+  const [, setLocation] = useLocation();
+  const { t } = useTranslation();
+  const { sdkClient } = useCoreSdkProvider();
+  const search = useSearch();
+  const { data: counters, isLoading: isLoadingCounters } = useListCounters();
 
   const { adapters, SearchWithNav } = useResourceFilters({
-    instructions: makeInstructions({})
-  })
+    instructions: makeInstructions({}),
+  });
 
   return (
     <HomePageLayout
-      title={t('resources.orders.name_other')}
+      title={t("resources.orders.name_other")}
       toolbar={{
         buttons: [
           {
-            icon: 'plus',
-            label: `${t('common.new')} ${t('resources.orders.name').toLowerCase()}`,
-            size: 'small',
+            icon: "plus",
+            label: `${t("common.new")} ${t(
+              "resources.orders.name"
+            ).toLowerCase()}`,
+            size: "small",
             onClick: () => {
               void sdkClient.markets
                 .list({
-                  fields: ['id'],
+                  fields: ["id"],
                   filters: {
-                    disabled_at_null: true
+                    disabled_at_null: true,
                   },
-                  pageSize: 1
+                  pageSize: 1,
                 })
                 .then((markets) => {
                   if (markets.meta.recordCount > 1) {
-                    setLocation(appRoutes.new.makePath({}))
+                    setLocation(appRoutes.new.makePath({}));
                   } else {
-                    const [resource] = markets
+                    const [resource] = markets;
                     if (resource != null) {
                       void sdkClient.orders
                         .create({
                           market: {
-                            type: 'markets',
-                            id: resource.id
-                          }
+                            type: "markets",
+                            id: resource.id,
+                          },
                         })
                         .then((order) => {
                           setLocation(
                             appRoutes.new.makePath({ orderId: order.id })
-                          )
-                        })
+                          );
+                        });
                     }
                   }
-                })
-            }
-          }
-        ]
+                });
+            },
+          },
+        ],
       }}
     >
       <SearchWithNav
         hideFiltersNav
         onFilterClick={() => {}}
         onUpdate={(qs) => {
-          setLocation(appRoutes.list.makePath({}, qs))
+          setLocation(appRoutes.list.makePath({}, qs));
         }}
         queryString={search}
         searchBarDebounceMs={1000}
       />
 
       <SkeletonTemplate isLoading={isLoadingCounters}>
-        <Spacer bottom='14'>
-          <List title={t('apps.orders.tasks.open')}>
+        <Spacer bottom="14">
+          <List title={t("apps.orders.tasks.open")}>
             <Link
               href={appRoutes.list.makePath(
                 {},
                 adapters.adaptFormValuesToUrlQuery({
-                  formValues: presets.awaitingApproval
+                  formValues: presets.awaitingApproval,
                 })
               )}
               asChild
@@ -98,21 +100,21 @@ function Home(): React.JSX.Element {
               <ListItem
                 icon={
                   <StatusIcon
-                    name='arrowDown'
-                    background='orange'
-                    gap='small'
+                    name="arrowDown"
+                    background="orange"
+                    gap="small"
                   />
                 }
               >
-                <Text weight='semibold'>
-                  {presets.awaitingApproval.viewTitle}{' '}
+                <Text weight="semibold">
+                  {presets.awaitingApproval.viewTitle}{" "}
                   {formatCounter(counters?.awaitingApproval)}
                 </Text>
-                <StatusIcon name='caretRight' />
+                <StatusIcon name="caretRight" />
               </ListItem>
             </Link>
 
-            <Link
+            {/* <Link
               href={appRoutes.list.makePath(
                 {},
                 adapters.adaptFormValuesToUrlQuery({
@@ -136,13 +138,13 @@ function Home(): React.JSX.Element {
                 </Text>
                 <StatusIcon name='caretRight' />
               </ListItem>
-            </Link>
+            </Link> */}
 
             <Link
               href={appRoutes.list.makePath(
                 {},
                 adapters.adaptFormValuesToUrlQuery({
-                  formValues: presets.fulfillmentInProgress
+                  formValues: presets.fulfillmentInProgress,
                 })
               )}
               asChild
@@ -150,17 +152,17 @@ function Home(): React.JSX.Element {
               <ListItem
                 icon={
                   <StatusIcon
-                    name='arrowClockwise'
-                    background='orange'
-                    gap='small'
+                    name="arrowClockwise"
+                    background="orange"
+                    gap="small"
                   />
                 }
               >
-                <Text weight='semibold'>
-                  {presets.fulfillmentInProgress.viewTitle}{' '}
+                <Text weight="semibold">
+                  {presets.fulfillmentInProgress.viewTitle}{" "}
                   {formatCounter(counters?.fulfillmentInProgress)}
                 </Text>
-                <StatusIcon name='caretRight' />
+                <StatusIcon name="caretRight" />
               </ListItem>
             </Link>
             {counters?.editing != null && counters?.editing > 0 && (
@@ -168,7 +170,7 @@ function Home(): React.JSX.Element {
                 href={appRoutes.list.makePath(
                   {},
                   adapters.adaptFormValuesToUrlQuery({
-                    formValues: presets.editing
+                    formValues: presets.editing,
                   })
                 )}
                 asChild
@@ -176,30 +178,30 @@ function Home(): React.JSX.Element {
                 <ListItem
                   icon={
                     <StatusIcon
-                      name='pencilSimple'
-                      background='orange'
-                      gap='small'
+                      name="pencilSimple"
+                      background="orange"
+                      gap="small"
                     />
                   }
                 >
-                  <Text weight='semibold'>
-                    {presets.editing.viewTitle}{' '}
+                  <Text weight="semibold">
+                    {presets.editing.viewTitle}{" "}
                     {formatCounter(counters?.editing)}
                   </Text>
-                  <StatusIcon name='caretRight' />
+                  <StatusIcon name="caretRight" />
                 </ListItem>
               </Link>
             )}
           </List>
         </Spacer>
 
-        <Spacer bottom='14'>
-          <List title={t('apps.orders.tasks.browse')}>
+        <Spacer bottom="14">
+          <List title={t("apps.orders.tasks.browse")}>
             <Link
               href={appRoutes.list.makePath(
                 {},
                 adapters.adaptFormValuesToUrlQuery({
-                  formValues: presets.history
+                  formValues: presets.history,
                 })
               )}
               asChild
@@ -207,55 +209,55 @@ function Home(): React.JSX.Element {
               <ListItem
                 icon={
                   <StatusIcon
-                    name='asteriskSimple'
-                    background='black'
-                    gap='small'
+                    name="asteriskSimple"
+                    background="black"
+                    gap="small"
                   />
                 }
               >
-                <Text weight='semibold'>{presets.history.viewTitle}</Text>
-                <StatusIcon name='caretRight' />
+                <Text weight="semibold">{presets.history.viewTitle}</Text>
+                <StatusIcon name="caretRight" />
               </ListItem>
             </Link>
             <Link
               href={appRoutes.list.makePath(
                 {},
                 adapters.adaptFormValuesToUrlQuery({
-                  formValues: presets.pending
+                  formValues: presets.pending,
                 })
               )}
               asChild
             >
-              <ListItem icon={<RadialProgress size='small' />}>
-                <Text weight='semibold'>{presets.pending.viewTitle}</Text>
-                <StatusIcon name='caretRight' />
+              <ListItem icon={<RadialProgress size="small" />}>
+                <Text weight="semibold">{presets.pending.viewTitle}</Text>
+                <StatusIcon name="caretRight" />
               </ListItem>
             </Link>
             <Link
               href={appRoutes.list.makePath(
                 {},
                 adapters.adaptFormValuesToUrlQuery({
-                  formValues: presets.archived
+                  formValues: presets.archived,
                 })
               )}
               asChild
             >
               <ListItem
-                icon={<StatusIcon name='minus' background='gray' gap='small' />}
+                icon={<StatusIcon name="minus" background="gray" gap="small" />}
               >
-                <Text weight='semibold'>{presets.archived.viewTitle}</Text>
-                <StatusIcon name='caretRight' />
+                <Text weight="semibold">{presets.archived.viewTitle}</Text>
+                <StatusIcon name="caretRight" />
               </ListItem>
             </Link>
           </List>
         </Spacer>
       </SkeletonTemplate>
     </HomePageLayout>
-  )
+  );
 }
 
 function formatCounter(counter = 0): string {
-  return `(${Intl.NumberFormat().format(counter)})`
+  return `(${Intl.NumberFormat().format(counter)})`;
 }
 
-export default Home
+export default Home;

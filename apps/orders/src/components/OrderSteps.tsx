@@ -1,4 +1,4 @@
-import type { BadgeProps } from '@commercelayer/app-elements'
+import type { BadgeProps } from "@commercelayer/app-elements";
 import {
   Badge,
   Spacer,
@@ -8,75 +8,80 @@ import {
   getOrderPaymentStatusName,
   getOrderStatusName,
   useTranslation,
-  withSkeletonTemplate
-} from '@commercelayer/app-elements'
-import type { Order } from '@commercelayer/sdk'
+  withSkeletonTemplate,
+} from "@commercelayer/app-elements";
+import type { Order } from "@commercelayer/sdk";
+import { useMemo } from "react";
 
 interface Props {
-  order: Order
+  order: Order;
 }
 
 function getOrderStatusBadgeVariant(
-  status: Order['status']
-): BadgeProps['variant'] {
+  status: Order["status"]
+): BadgeProps["variant"] {
   switch (status) {
-    case 'approved':
-      return 'success-solid'
-    case 'cancelled':
-    case 'draft':
-    case 'pending':
-      return 'secondary'
-    case 'placed':
-    case 'placing':
-    case 'editing':
-      return 'warning-solid'
+    case "approved":
+      return "success-solid";
+    case "cancelled":
+    case "draft":
+    case "pending":
+      return "secondary";
+    case "placed":
+    case "placing":
+    case "editing":
+      return "warning-solid";
   }
 }
 
 function getPaymentStatusBadgeVariant(
-  status: Order['payment_status']
-): BadgeProps['variant'] {
+  status: Order["payment_status"]
+): BadgeProps["variant"] {
   switch (status) {
-    case 'paid':
-    case 'free':
-      return 'success-solid'
-    case 'unpaid':
-    case 'partially_paid':
-    case 'refunded':
-    case 'voided':
-    case 'partially_refunded':
-    case 'partially_voided':
-      return 'secondary'
-    case 'authorized':
-    case 'partially_authorized':
-      return 'warning-solid'
+    case "paid":
+    case "free":
+      return "success-solid";
+    case "unpaid":
+    case "partially_paid":
+    case "refunded":
+    case "voided":
+    case "partially_refunded":
+    case "partially_voided":
+      return "secondary";
+    case "authorized":
+    case "partially_authorized":
+      return "warning-solid";
   }
 }
 
 function getFulfillmentStatusBadgeVariant(
-  status: Order['fulfillment_status']
-): BadgeProps['variant'] {
+  status: Order["fulfillment_status"]
+): BadgeProps["variant"] {
   switch (status) {
-    case 'fulfilled':
-      return 'success-solid'
-    case 'unfulfilled':
-    case 'not_required':
-      return 'secondary'
-    case 'in_progress':
-      return 'warning-solid'
+    case "fulfilled":
+      return "success-solid";
+    case "unfulfilled":
+    case "not_required":
+      return "secondary";
+    case "in_progress":
+      return "warning-solid";
   }
 }
 
 export const OrderSteps = withSkeletonTemplate<Props>(
   ({ order }): React.JSX.Element => {
-    const { t } = useTranslation()
+    const { t } = useTranslation();
+    const paymentStatus = useMemo(
+      () => (order?.metadata?.["payment_status"] === "_captured" ? "PAID" : ""),
+      [order?.metadata]
+    );
 
     return (
       <Stack>
         <div>
-          <Spacer bottom='2'>
-            <Text size='small' tag='div' variant='info' weight='semibold'>
-              {t('resources.orders.name')}
+          <Spacer bottom="2">
+            <Text size="small" tag="div" variant="info" weight="semibold">
+              {t("resources.orders.name")}
             </Text>
           </Spacer>
           {order.status !== undefined && (
@@ -86,22 +91,29 @@ export const OrderSteps = withSkeletonTemplate<Props>(
           )}
         </div>
         <div>
-          <Spacer bottom='2'>
-            <Text size='small' tag='div' variant='info' weight='semibold'>
-              {t('apps.orders.details.payment')}
+          <Spacer bottom="2">
+            <Text size="small" tag="div" variant="info" weight="semibold">
+              {t("apps.orders.details.payment")}
             </Text>
           </Spacer>
           {order.payment_status !== undefined && (
-            <Badge variant={getPaymentStatusBadgeVariant(order.payment_status)}>
-              {getOrderPaymentStatusName(order.payment_status).toUpperCase()}
+            <Badge
+              variant={
+                paymentStatus === "PAID"
+                  ? "success-solid"
+                  : getPaymentStatusBadgeVariant(order.payment_status)
+              }
+            >
+              {paymentStatus ||
+                getOrderPaymentStatusName(order.payment_status).toUpperCase()}
             </Badge>
           )}
         </div>
 
         <div>
-          <Spacer bottom='2'>
-            <Text size='small' tag='div' variant='info' weight='semibold'>
-              {t('apps.orders.details.fulfillment')}
+          <Spacer bottom="2">
+            <Text size="small" tag="div" variant="info" weight="semibold">
+              {t("apps.orders.details.fulfillment")}
             </Text>
           </Spacer>
           {order.fulfillment_status !== undefined && (
@@ -117,6 +129,6 @@ export const OrderSteps = withSkeletonTemplate<Props>(
           )}
         </div>
       </Stack>
-    )
+    );
   }
-)
+);
