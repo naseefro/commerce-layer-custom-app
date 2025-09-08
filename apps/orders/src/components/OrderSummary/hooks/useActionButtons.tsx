@@ -15,14 +15,19 @@ import {
 import { useOrderStatus } from "./useOrderStatus";
 import { useSelectShippingMethodOverlay } from "./useSelectShippingMethodOverlay";
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const useActionButtons = ({ order }: { order: Order }) => {
   const triggerAttributes = useMemo(() => {
     const attributes = getTriggerAttributes(order);
-    return attributes.includes("_capture")
-      ? attributes.filter((attr) => attr !== "_capture")
-      : attributes;
+    if (!Array.isArray(attributes)) return attributes;
+
+    const isOrderFulfilled = order.fulfillment_status === "fulfilled";
+    if (attributes.includes("_capture") && !isOrderFulfilled) {
+      // Remove _capture if order is NOT fulfilled
+      return attributes.filter((attr) => attr !== "_capture");
+    }
+    return attributes;
   }, [order]);
+  console.log("attributes", triggerAttributes);
 
   const { t } = useTranslation();
 

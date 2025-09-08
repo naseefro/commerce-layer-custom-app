@@ -114,11 +114,11 @@ function Home(): React.JSX.Element {
               </ListItem>
             </Link>
 
-            {/* <Link
+            <Link
               href={appRoutes.list.makePath(
                 {},
                 adapters.adaptFormValuesToUrlQuery({
-                  formValues: presets.paymentToCapture
+                  formValues: presets.paymentToCapture,
                 })
               )}
               asChild
@@ -126,19 +126,19 @@ function Home(): React.JSX.Element {
               <ListItem
                 icon={
                   <StatusIcon
-                    name='creditCard'
-                    background='orange'
-                    gap='small'
+                    name="creditCard"
+                    background="orange"
+                    gap="small"
                   />
                 }
               >
-                <Text weight='semibold'>
-                  {presets.paymentToCapture.viewTitle}{' '}
+                <Text weight="semibold">
+                  {presets.paymentToCapture.viewTitle}{" "}
                   {formatCounter(counters?.paymentToCapture)}
                 </Text>
-                <StatusIcon name='caretRight' />
+                <StatusIcon name="caretRight" />
               </ListItem>
-            </Link> */}
+            </Link>
 
             <Link
               href={appRoutes.list.makePath(

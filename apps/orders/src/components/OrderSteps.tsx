@@ -11,7 +11,6 @@ import {
   withSkeletonTemplate,
 } from "@commercelayer/app-elements";
 import type { Order } from "@commercelayer/sdk";
-import { useMemo } from "react";
 
 interface Props {
   order: Order;
@@ -71,10 +70,6 @@ function getFulfillmentStatusBadgeVariant(
 export const OrderSteps = withSkeletonTemplate<Props>(
   ({ order }): React.JSX.Element => {
     const { t } = useTranslation();
-    const paymentStatus = useMemo(
-      () => (order?.metadata?.["payment_status"] === "_captured" ? "PAID" : ""),
-      [order?.metadata]
-    );
 
     return (
       <Stack>
@@ -97,15 +92,8 @@ export const OrderSteps = withSkeletonTemplate<Props>(
             </Text>
           </Spacer>
           {order.payment_status !== undefined && (
-            <Badge
-              variant={
-                paymentStatus === "PAID"
-                  ? "success-solid"
-                  : getPaymentStatusBadgeVariant(order.payment_status)
-              }
-            >
-              {paymentStatus ||
-                getOrderPaymentStatusName(order.payment_status).toUpperCase()}
+            <Badge variant={getPaymentStatusBadgeVariant(order.payment_status)}>
+              {getOrderPaymentStatusName(order.payment_status).toUpperCase()}
             </Badge>
           )}
         </div>
