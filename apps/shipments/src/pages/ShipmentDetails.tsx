@@ -55,7 +55,7 @@ function ShipmentDetails(): React.JSX.Element {
   // Shared function to generate pick sheet HTML
   const generatePickSheetHTML = () => {
     if (!shipment) return null;
-    const aa = (
+    const body = (
       <div
         style={{
           fontFamily:
@@ -437,14 +437,14 @@ function ShipmentDetails(): React.JSX.Element {
       </div>
     );
 
-    const html = ReactDOMServer.renderToString(aa);
+    const html = ReactDOMServer.renderToString(body);
     return `
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pick Sheet - Order #123456</title>
+    <title>Pick Sheet - Order #${shipment.order?.number || "Unknown"}</title>
     <style>
         * {
             margin: 0;
@@ -471,7 +471,6 @@ function ShipmentDetails(): React.JSX.Element {
             margin-bottom: 30px;
             text-align: center;
         }
-        
         
         table {
             width: 100%;
@@ -502,6 +501,26 @@ function ShipmentDetails(): React.JSX.Element {
             .container {
                 max-width: 100%;
             }
+            
+            @page {
+                margin: 0.5in;
+                @top-left {
+                    content: "Pick Sheet - Order #${
+                      shipment.order?.number || "Unknown"
+                    }";
+                    font-size: 10px;
+                    font-weight: bold;
+                }
+                @top-right {
+                    content: "Page " counter(page) " of " counter(pages);
+                    font-size: 10px;
+                }
+                @bottom-center {
+                    content: "Generated on " date(iso, now);
+                    font-size: 8px;
+                    color: #666;
+                }
+            }
         }
     </style>
 </head>
@@ -518,7 +537,7 @@ function ShipmentDetails(): React.JSX.Element {
     setActionError(null);
 
     try {
-      const html = generatePickSheetHTML(); // ✅ include styles
+      const html = generatePickSheetHTML();
       if (!html) throw new Error("Failed to generate pick sheet HTML");
 
       const opt = {
@@ -526,10 +545,53 @@ function ShipmentDetails(): React.JSX.Element {
         filename: `pick_sheet_${shipment.order?.number ?? "unknown"}.pdf`,
         image: { type: "jpeg", quality: 1 },
         html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
+        jsPDF: {
+          unit: "in",
+          format: "a4",
+          orientation: "portrait",
+        },
       };
 
-      await html2pdf().set(opt).from(html).save(); // ✅ keep styles
+      // Generate PDF and then add headers/footers
+      const pdf = await html2pdf()
+        .set(opt)
+        .from(html)
+        .toPdf()
+        .get("pdf")
+        .then((jsPDFInstance) => {
+          if (jsPDFInstance && jsPDFInstance.internal) {
+            const totalPages = jsPDFInstance.internal.getNumberOfPages();
+
+            for (let i = 1; i <= totalPages; i++) {
+              jsPDFInstance.setPage(i);
+
+              // Header - Document title
+              jsPDFInstance.setFontSize(10);
+              jsPDFInstance.setFont(undefined, "bold");
+              jsPDFInstance.text(
+                `Pick Sheet - Order #${shipment.order?.number || "Unknown"}`,
+                0.5,
+                0.3
+              );
+
+              // Header - Page number
+              jsPDFInstance.setFont(undefined, "normal");
+              jsPDFInstance.text(`Page ${i} of ${totalPages}`, 7.5, 0.3);
+
+              // Footer - Generation date
+              jsPDFInstance.setFontSize(8);
+              jsPDFInstance.setTextColor(102, 102, 102);
+              const now = new Date().toLocaleDateString();
+              jsPDFInstance.text(`Generated on ${now}`, 4, 10.7, {
+                align: "center",
+              });
+            }
+          }
+          return jsPDFInstance;
+        });
+
+      // Save the PDF
+      pdf.save();
       setActionError(null);
     } catch (error) {
       console.error("Failed to generate pick sheet:", error);
