@@ -173,7 +173,6 @@ function ShipmentDetails(): React.JSX.Element {
           style={{
             width: "100%",
             borderCollapse: "collapse",
-            marginBottom: 10,
           }}
         >
           <thead>
@@ -182,8 +181,8 @@ function ShipmentDetails(): React.JSX.Element {
                 style={{
                   textAlign: "left",
                   padding: 12,
-                  borderTop: "2px solid #000000ff",
-                  borderBottom: "2px solid #000000ff",
+                  borderTop: "1px solid #000000ff",
+                  borderBottom: "1px solid #000000ff",
                   fontSize: 12,
                   fontWeight: 600,
                   width: 50,
@@ -195,8 +194,8 @@ function ShipmentDetails(): React.JSX.Element {
                 style={{
                   textAlign: "left",
                   padding: 12,
-                  borderTop: "2px solid #000000ff",
-                  borderBottom: "2px solid #000000ff",
+                  borderTop: "1px solid #000000ff",
+                  borderBottom: "1px solid #000000ff",
                   fontSize: 12,
                   fontWeight: 600,
                   width: 100,
@@ -208,8 +207,8 @@ function ShipmentDetails(): React.JSX.Element {
                 style={{
                   textAlign: "left",
                   padding: 12,
-                  borderTop: "2px solid #000000ff",
-                  borderBottom: "2px solid #000000ff",
+                  borderTop: "1px solid #000000ff",
+                  borderBottom: "1px solid #000000ff",
                   fontSize: 12,
                   fontWeight: 600,
                   width: 120,
@@ -221,8 +220,8 @@ function ShipmentDetails(): React.JSX.Element {
                 style={{
                   textAlign: "left",
                   padding: 12,
-                  borderTop: "2px solid #000000ff",
-                  borderBottom: "2px solid #000000ff",
+                  borderTop: "1px solid #000000ff",
+                  borderBottom: "1px solid #000000ff",
                   fontSize: 12,
                   fontWeight: 600,
                 }}
@@ -233,8 +232,8 @@ function ShipmentDetails(): React.JSX.Element {
                 style={{
                   textAlign: "left",
                   padding: 12,
-                  borderTop: "2px solid #000000ff",
-                  borderBottom: "2px solid #000000ff",
+                  borderTop: "1px solid #000000ff",
+                  borderBottom: "1px solid #000000ff",
                   fontSize: 12,
                   fontWeight: 600,
                 }}
@@ -245,8 +244,8 @@ function ShipmentDetails(): React.JSX.Element {
                 style={{
                   textAlign: "left",
                   padding: 12,
-                  borderTop: "2px solid #000000ff",
-                  borderBottom: "2px solid #000000ff",
+                  borderTop: "1px solid #000000ff",
+                  borderBottom: "1px solid #000000ff",
                   fontSize: 12,
                   fontWeight: 600,
                   width: 100,
@@ -258,8 +257,8 @@ function ShipmentDetails(): React.JSX.Element {
                 style={{
                   textAlign: "center",
                   padding: 12,
-                  borderTop: "2px solid #000000ff",
-                  borderBottom: "2px solid #000000ff",
+                  borderTop: "1px solid #000000ff",
+                  borderBottom: "1px solid #000000ff",
                   fontSize: 12,
                   fontWeight: 600,
                   width: 60,
