@@ -60,17 +60,19 @@ function ShipmentDetails(): React.JSX.Element {
         style={{
           fontFamily:
             "-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
-          padding: 40,
+          paddingLeft: 40,
+          paddingRight: 40,
+          paddingTop: 10,
+          paddingBottom: 10,
           background: "white",
           color: "#000",
-          lineHeight: 1.4,
           maxWidth: 800,
           margin: "0 auto",
         }}
       >
         <h1
           style={{
-            fontSize: 24,
+            fontSize: 18,
             fontWeight: 600,
             marginBottom: 30,
             textAlign: "center",
@@ -85,11 +87,11 @@ function ShipmentDetails(): React.JSX.Element {
             display: "grid",
             gridTemplateColumns: "1fr 1fr",
             gap: 40,
-            marginBottom: 30,
+            marginBottom: 10,
           }}
         >
-          <div key="shipping_address" style={{ fontSize: "12px" }}>
-            <h2 style={{ fontSize: 14, fontWeight: 600, marginBottom: 12 }}>
+          <div key="shipping_address" style={{ fontSize: 10 }}>
+            <h2 style={{ fontSize: 12, fontWeight: 600, marginBottom: 12 }}>
               Shipping Address
             </h2>
             <p>
@@ -100,11 +102,11 @@ function ShipmentDetails(): React.JSX.Element {
               {shipment?.shipping_address?.city},{" "}
               {shipment?.shipping_address?.country_code}
             </p>
-            <p style={{ marginTop: 10 }}>{shipment?.shipping_address?.email}</p>
+            <p style={{ marginTop: 5 }}>{shipment?.shipping_address?.email}</p>
             <p>{shipment?.shipping_address?.phone}</p>
           </div>
-          <div key="billing_address" style={{ fontSize: "12px" }}>
-            <h2 style={{ fontSize: 14, fontWeight: 600, marginBottom: 12 }}>
+          <div key="billing_address" style={{ fontSize: 10 }}>
+            <h2 style={{ fontSize: 12, fontWeight: 600, marginBottom: 12 }}>
               Billing Address
             </h2>
             <p>
@@ -115,7 +117,7 @@ function ShipmentDetails(): React.JSX.Element {
               {shipment?.order?.billing_address?.city},{" "}
               {shipment?.order?.billing_address?.country_code}
             </p>
-            <p style={{ marginTop: 10 }}>
+            <p style={{ marginTop: 5 }}>
               {shipment?.order?.billing_address?.email}
             </p>
             <p>{shipment?.order?.billing_address?.phone}</p>
@@ -128,19 +130,19 @@ function ShipmentDetails(): React.JSX.Element {
             display: "grid",
             gridTemplateColumns: "1fr 1fr 1fr",
             gap: 30,
-            marginTop: 30,
-            marginBottom: 30,
-            fontSize: 12,
+            marginTop: 10,
+            marginBottom: 10,
+            fontSize: 10,
           }}
         >
           <div>
-            <h3 style={{ fontSize: 14, fontWeight: 600, marginBottom: 8 }}>
+            <h3 style={{ fontSize: 12, fontWeight: 600, marginBottom: 8 }}>
               Order Date & Time
             </h3>
             <p>{formatDate(shipment?.order?.placed_at)}</p>
           </div>
           <div>
-            <h3 style={{ fontSize: 14, fontWeight: 600, marginBottom: 8 }}>
+            <h3 style={{ fontSize: 12, fontWeight: 600, marginBottom: 8 }}>
               Amount to be collected
             </h3>
             <p>
@@ -148,7 +150,7 @@ function ShipmentDetails(): React.JSX.Element {
             </p>
           </div>
           <div>
-            <h3 style={{ fontSize: 14, fontWeight: 600, marginBottom: 8 }}>
+            <h3 style={{ fontSize: 12, fontWeight: 600, marginBottom: 8 }}>
               Payment Method
             </h3>
             <p>{shipment?.order?.payment_method?.name}</p>
@@ -156,12 +158,16 @@ function ShipmentDetails(): React.JSX.Element {
         </div>
 
         {/* Delivery Note */}
-        <div style={{ marginBottom: 30 }}>
-          <h3 style={{ fontSize: 14, fontWeight: 600, marginBottom: 8 }}>
-            Delivery Note
-          </h3>
-          <p>{shipment?.order?.metadata?.delivery_notes}</p>
-        </div>
+        {shipment?.order?.metadata?.delivery_notes ? (
+          <div style={{ marginBottom: 10, fontSize: 10 }}>
+            <h3 style={{ fontSize: 12, fontWeight: 600, marginBottom: 8 }}>
+              Delivery Note
+            </h3>
+            <p>{shipment?.order?.metadata?.delivery_notes}</p>
+          </div>
+        ) : (
+          ""
+        )}
         {/* Table */}
         <table
           style={{
@@ -178,7 +184,7 @@ function ShipmentDetails(): React.JSX.Element {
                   padding: 12,
                   borderTop: "2px solid #000000ff",
                   borderBottom: "2px solid #000000ff",
-                  fontSize: 14,
+                  fontSize: 12,
                   fontWeight: 600,
                   width: 50,
                 }}
@@ -191,7 +197,7 @@ function ShipmentDetails(): React.JSX.Element {
                   padding: 12,
                   borderTop: "2px solid #000000ff",
                   borderBottom: "2px solid #000000ff",
-                  fontSize: 14,
+                  fontSize: 12,
                   fontWeight: 600,
                   width: 100,
                 }}
@@ -204,7 +210,7 @@ function ShipmentDetails(): React.JSX.Element {
                   padding: 12,
                   borderTop: "2px solid #000000ff",
                   borderBottom: "2px solid #000000ff",
-                  fontSize: 14,
+                  fontSize: 12,
                   fontWeight: 600,
                   width: 120,
                 }}
@@ -217,7 +223,7 @@ function ShipmentDetails(): React.JSX.Element {
                   padding: 12,
                   borderTop: "2px solid #000000ff",
                   borderBottom: "2px solid #000000ff",
-                  fontSize: 14,
+                  fontSize: 12,
                   fontWeight: 600,
                 }}
               >
@@ -229,7 +235,7 @@ function ShipmentDetails(): React.JSX.Element {
                   padding: 12,
                   borderTop: "2px solid #000000ff",
                   borderBottom: "2px solid #000000ff",
-                  fontSize: 14,
+                  fontSize: 12,
                   fontWeight: 600,
                 }}
               >
@@ -241,7 +247,7 @@ function ShipmentDetails(): React.JSX.Element {
                   padding: 12,
                   borderTop: "2px solid #000000ff",
                   borderBottom: "2px solid #000000ff",
-                  fontSize: 14,
+                  fontSize: 12,
                   fontWeight: 600,
                   width: 100,
                 }}
@@ -254,7 +260,7 @@ function ShipmentDetails(): React.JSX.Element {
                   padding: 12,
                   borderTop: "2px solid #000000ff",
                   borderBottom: "2px solid #000000ff",
-                  fontSize: 14,
+                  fontSize: 12,
                   fontWeight: 600,
                   width: 60,
                 }}
@@ -270,7 +276,7 @@ function ShipmentDetails(): React.JSX.Element {
                   style={{
                     padding: "16px 12px",
                     borderBottom: "1px solid #eee",
-                    fontSize: 12,
+                    fontSize: 10,
                   }}
                 >
                   {index + 1}
@@ -317,7 +323,7 @@ function ShipmentDetails(): React.JSX.Element {
                   style={{
                     padding: "16px 12px",
                     borderBottom: "1px solid #eee",
-                    fontSize: 12,
+                    fontSize: 10,
                   }}
                 >
                   {item.sku?.reference ?? ""}
@@ -326,7 +332,7 @@ function ShipmentDetails(): React.JSX.Element {
                   style={{
                     padding: "16px 12px",
                     borderBottom: "1px solid #eee",
-                    fontSize: 12,
+                    fontSize: 10,
                   }}
                 >
                   {item.sku_code}
@@ -335,7 +341,7 @@ function ShipmentDetails(): React.JSX.Element {
                   style={{
                     padding: "16px 12px",
                     borderBottom: "1px solid #eee",
-                    fontSize: 12,
+                    fontSize: 10,
                   }}
                 >
                   {item.name}
@@ -344,7 +350,7 @@ function ShipmentDetails(): React.JSX.Element {
                   style={{
                     padding: "16px 12px",
                     borderBottom: "1px solid #eee",
-                    fontSize: 12,
+                    fontSize: 10,
                   }}
                 >
                   {item.metadata?.gift_pack ? "Yes" : "No"}
@@ -353,7 +359,7 @@ function ShipmentDetails(): React.JSX.Element {
                   style={{
                     padding: "16px 12px",
                     borderBottom: "1px solid #eee",
-                    fontSize: 12,
+                    fontSize: 10,
                     textAlign: "center",
                   }}
                 >
@@ -365,13 +371,13 @@ function ShipmentDetails(): React.JSX.Element {
         </table>
 
         {/* Summary */}
-        <div style={{ marginTop: 20, paddingTop: 20 }}>
+        <div style={{ marginTop: 10 }}>
           <div
             style={{
               display: "flex",
               justifyContent: "space-between",
               padding: "8px 12px",
-              fontSize: 12,
+              fontSize: 10,
             }}
           >
             <span>Subtotal</span>
@@ -386,7 +392,7 @@ function ShipmentDetails(): React.JSX.Element {
               display: "flex",
               justifyContent: "space-between",
               padding: "8px 12px",
-              fontSize: 12,
+              fontSize: 10,
             }}
           >
             <span>Delivery</span>
@@ -402,7 +408,7 @@ function ShipmentDetails(): React.JSX.Element {
                 display: "flex",
                 justifyContent: "space-between",
                 padding: "8px 12px",
-                fontSize: 12,
+                fontSize: 10,
               }}
             >
               <span>Discounts</span>
@@ -413,15 +419,13 @@ function ShipmentDetails(): React.JSX.Element {
           ) : (
             ""
           )}
+          <hr style={{ border: "none", borderTop: "1px solid #eee" }} />
           <div
             style={{
               display: "flex",
               justifyContent: "space-between",
-              padding: "15px 12px 8px",
-              fontSize: 14,
-              borderTop: "1px solid #ccc",
-              borderBottom: "1px solid #ccc",
-              marginTop: 10,
+              padding: "8px 12px",
+              fontSize: 12,
             }}
           >
             <span>
@@ -433,6 +437,7 @@ function ShipmentDetails(): React.JSX.Element {
                 : ""}
             </span>
           </div>
+          <hr style={{ border: "none", borderTop: "1px solid #eee" }} />
         </div>
       </div>
     );
@@ -454,7 +459,6 @@ function ShipmentDetails(): React.JSX.Element {
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-            padding: 20px;
             background: white;
             color: #000;
             line-height: 1.4;
@@ -465,12 +469,6 @@ function ShipmentDetails(): React.JSX.Element {
             margin: 0 auto;
         }
         
-        h1 {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 30px;
-            text-align: center;
-        }
         
         table {
             width: 100%;
@@ -515,11 +513,7 @@ function ShipmentDetails(): React.JSX.Element {
                     content: "Page " counter(page) " of " counter(pages);
                     font-size: 10px;
                 }
-                @bottom-center {
-                    content: "Generated on " date(iso, now);
-                    font-size: 8px;
-                    color: #666;
-                }
+                
             }
         }
     </style>
@@ -529,7 +523,6 @@ function ShipmentDetails(): React.JSX.Element {
 </html>
     `;
   };
-
   const handleDownloadPickSheet = async () => {
     if (!shipment || isGeneratingPDF) return;
 
@@ -540,9 +533,12 @@ function ShipmentDetails(): React.JSX.Element {
       const html = generatePickSheetHTML();
       if (!html) throw new Error("Failed to generate pick sheet HTML");
 
+      // Generate the filename once
+      const filename = `pick_sheet_${shipment.order?.number ?? "unknown"}.pdf`;
+
       const opt = {
-        margin: 0.5,
-        filename: `pick_sheet_${shipment.order?.number ?? "unknown"}.pdf`,
+        margin: [0.3, 0.3, 0.5, 0.5],
+        filename: filename, // This is used by html2pdf internally
         image: { type: "jpeg", quality: 1 },
         html2canvas: { scale: 2, useCORS: true },
         jsPDF: {
@@ -552,46 +548,36 @@ function ShipmentDetails(): React.JSX.Element {
         },
       };
 
+      const worker = html2pdf().set(opt).from(html).toPdf();
+
       // Generate PDF and then add headers/footers
-      const pdf = await html2pdf()
-        .set(opt)
-        .from(html)
-        .toPdf()
-        .get("pdf")
-        .then((jsPDFInstance) => {
-          if (jsPDFInstance && jsPDFInstance.internal) {
-            const totalPages = jsPDFInstance.internal.getNumberOfPages();
+      const pdf = await worker.get("pdf").then((jsPDFInstance) => {
+        if (jsPDFInstance && jsPDFInstance.internal) {
+          const totalPages = jsPDFInstance.internal.getNumberOfPages();
 
-            for (let i = 1; i <= totalPages; i++) {
-              jsPDFInstance.setPage(i);
+          for (let i = 1; i <= totalPages; i++) {
+            jsPDFInstance.setPage(i);
 
-              // Header - Document title
-              jsPDFInstance.setFontSize(10);
-              jsPDFInstance.setFont(undefined, "bold");
-              jsPDFInstance.text(
-                `Pick Sheet - Order #${shipment.order?.number || "Unknown"}`,
-                0.5,
-                0.3
-              );
+            // Header - Document title
+            jsPDFInstance.setFontSize(8);
+            jsPDFInstance.setFont(undefined, "normal");
+            jsPDFInstance.text(
+              `Pick Sheet - Order #${shipment.order?.number || "Unknown"}`,
+              0.5,
+              0.3
+            );
 
-              // Header - Page number
-              jsPDFInstance.setFont(undefined, "normal");
-              jsPDFInstance.text(`Page ${i} of ${totalPages}`, 7.5, 0.3);
-
-              // Footer - Generation date
-              jsPDFInstance.setFontSize(8);
-              jsPDFInstance.setTextColor(102, 102, 102);
-              const now = new Date().toLocaleDateString();
-              jsPDFInstance.text(`Generated on ${now}`, 4, 10.7, {
-                align: "center",
-              });
-            }
+            // Header - Page number
+            jsPDFInstance.setFontSize(8);
+            jsPDFInstance.setFont(undefined, "normal");
+            jsPDFInstance.text(`Page ${i} of ${totalPages}`, 7, 0.3);
           }
-          return jsPDFInstance;
-        });
+        }
+        return jsPDFInstance;
+      });
 
-      // Save the PDF
-      pdf.save();
+      // Save the PDF with the specific filename
+      pdf.save(filename);
       setActionError(null);
     } catch (error) {
       console.error("Failed to generate pick sheet:", error);
