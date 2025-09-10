@@ -27,7 +27,6 @@ export const useActionButtons = ({ order }: { order: Order }) => {
     }
     return attributes;
   }, [order]);
-  console.log("attributes", triggerAttributes);
 
   const { t } = useTranslation();
 

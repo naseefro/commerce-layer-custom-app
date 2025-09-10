@@ -29,7 +29,9 @@ import {
 import html2pdf from "html2pdf.js";
 import isEmpty from "lodash-es/isEmpty";
 import React, { useState } from "react";
+import ReactDOMServer from "react-dom/server";
 import { useRoute } from "wouter";
+import { formatDate } from "../utils/date";
 
 function ShipmentDetails(): React.JSX.Element {
   const {
@@ -49,75 +51,464 @@ function ShipmentDetails(): React.JSX.Element {
   const { shipment, isLoading, error, mutateShipment, purchaseError } =
     useShipmentDetails(shipmentId);
   const pageToolbar = useShipmentToolbar({ shipment });
-  console.log(
-    "shipment",
-    shipment?.stock_line_items?.[0]?.sku?.metadata?.product_code
-  );
 
   // Shared function to generate pick sheet HTML
   const generatePickSheetHTML = () => {
     if (!shipment) return null;
+    const aa = (
+      <div
+        style={{
+          fontFamily:
+            "-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
+          padding: 40,
+          background: "white",
+          color: "#000",
+          lineHeight: 1.4,
+          maxWidth: 800,
+          margin: "0 auto",
+        }}
+      >
+        <h1
+          style={{
+            fontSize: 24,
+            fontWeight: 600,
+            marginBottom: 30,
+            textAlign: "center",
+          }}
+        >
+          Pick Sheet # {shipment.order?.number}
+        </h1>
 
-    const now = new Date().toLocaleString();
-    const rows = (shipment.stock_line_items ?? [])
-      .map(
-        (item) => `
-        <tr>
-         <td>
-            ${
-              item.image_url
-                ? `<img src="${item.image_url}" crossorigin="anonymous"/>`
-                : "-"
-            }
-          </td>
-          <td>${item.sku?.metadata?.product_code ?? ""}</td>
-          <td>${item.sku_code}</td>
-          <td>${item.name}</td>
-          <td>${item.quantity}</td>
-        </tr>`
-      )
-      .join("");
-
-    const html = `
-    <div style="font-family: 'Segoe UI', Tahoma, sans-serif; padding: 24px;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-        <div>
-          <h1 style="margin:0; font-size:22px; color:#333;">📦 Pick Sheet</h1>
-          <p style="margin:4px 0; font-size:14px; color:#666;">
-            Order: <strong>${shipment.order?.number ?? "unknown"}</strong><br/>
-            Shipment: <strong>${shipment.number}</strong><br/>
-            Generated: ${now}
-          </p>
+        {/* Info Grid */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: 40,
+            marginBottom: 30,
+          }}
+        >
+          <div key="shipping_address" style={{ fontSize: "12px" }}>
+            <h2 style={{ fontSize: 14, fontWeight: 600, marginBottom: 12 }}>
+              Shipping Address
+            </h2>
+            <p>
+              <strong>{shipment?.shipping_address?.name}</strong>
+            </p>
+            <p>{shipment?.shipping_address?.line_1}</p>
+            <p>
+              {shipment?.shipping_address?.city},{" "}
+              {shipment?.shipping_address?.country_code}
+            </p>
+            <p style={{ marginTop: 10 }}>{shipment?.shipping_address?.email}</p>
+            <p>{shipment?.shipping_address?.phone}</p>
+          </div>
+          <div key="billing_address" style={{ fontSize: "12px" }}>
+            <h2 style={{ fontSize: 14, fontWeight: 600, marginBottom: 12 }}>
+              Billing Address
+            </h2>
+            <p>
+              <strong>{shipment?.order?.billing_address?.name}</strong>
+            </p>
+            <p>{shipment?.order?.billing_address?.line_1}</p>
+            <p>
+              {shipment?.order?.billing_address?.city},{" "}
+              {shipment?.order?.billing_address?.country_code}
+            </p>
+            <p style={{ marginTop: 10 }}>
+              {shipment?.order?.billing_address?.email}
+            </p>
+            <p>{shipment?.order?.billing_address?.phone}</p>
+          </div>
         </div>
-        <div>
-          <!-- Optional: add company logo -->
-          <img src="data:image/png;base64,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" style="height:40px;" />
+        <hr style={{ border: "none", borderTop: "1px solid #eee" }} />
+        {/* Order Details */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr 1fr",
+            gap: 30,
+            marginTop: 30,
+            marginBottom: 30,
+            fontSize: 12,
+          }}
+        >
+          <div>
+            <h3 style={{ fontSize: 14, fontWeight: 600, marginBottom: 8 }}>
+              Order Date & Time
+            </h3>
+            <p>{formatDate(shipment?.order?.placed_at)}</p>
+          </div>
+          <div>
+            <h3 style={{ fontSize: 14, fontWeight: 600, marginBottom: 8 }}>
+              Amount to be collected
+            </h3>
+            <p>
+              <strong>{shipment?.order?.total_amount_float}</strong>
+            </p>
+          </div>
+          <div>
+            <h3 style={{ fontSize: 14, fontWeight: 600, marginBottom: 8 }}>
+              Payment Method
+            </h3>
+            <p>{shipment?.order?.payment_method?.name}</p>
+          </div>
+        </div>
+
+        {/* Delivery Note */}
+        <div style={{ marginBottom: 30 }}>
+          <h3 style={{ fontSize: 14, fontWeight: 600, marginBottom: 8 }}>
+            Delivery Note
+          </h3>
+          <p>{shipment?.order?.metadata?.delivery_notes}</p>
+        </div>
+        {/* Table */}
+        <table
+          style={{
+            width: "100%",
+            borderCollapse: "collapse",
+            marginBottom: 10,
+          }}
+        >
+          <thead>
+            <tr>
+              <th
+                style={{
+                  textAlign: "left",
+                  padding: 12,
+                  borderTop: "2px solid #000000ff",
+                  borderBottom: "2px solid #000000ff",
+                  fontSize: 14,
+                  fontWeight: 600,
+                  width: 50,
+                }}
+              >
+                #
+              </th>
+              <th
+                style={{
+                  textAlign: "left",
+                  padding: 12,
+                  borderTop: "2px solid #000000ff",
+                  borderBottom: "2px solid #000000ff",
+                  fontSize: 14,
+                  fontWeight: 600,
+                  width: 100,
+                }}
+              >
+                Image
+              </th>
+              <th
+                style={{
+                  textAlign: "left",
+                  padding: 12,
+                  borderTop: "2px solid #000000ff",
+                  borderBottom: "2px solid #000000ff",
+                  fontSize: 14,
+                  fontWeight: 600,
+                  width: 120,
+                }}
+              >
+                Code
+              </th>
+              <th
+                style={{
+                  textAlign: "left",
+                  padding: 12,
+                  borderTop: "2px solid #000000ff",
+                  borderBottom: "2px solid #000000ff",
+                  fontSize: 14,
+                  fontWeight: 600,
+                }}
+              >
+                Sku
+              </th>
+              <th
+                style={{
+                  textAlign: "left",
+                  padding: 12,
+                  borderTop: "2px solid #000000ff",
+                  borderBottom: "2px solid #000000ff",
+                  fontSize: 14,
+                  fontWeight: 600,
+                }}
+              >
+                Name
+              </th>
+              <th
+                style={{
+                  textAlign: "left",
+                  padding: 12,
+                  borderTop: "2px solid #000000ff",
+                  borderBottom: "2px solid #000000ff",
+                  fontSize: 14,
+                  fontWeight: 600,
+                  width: 100,
+                }}
+              >
+                Gift Pack
+              </th>
+              <th
+                style={{
+                  textAlign: "center",
+                  padding: 12,
+                  borderTop: "2px solid #000000ff",
+                  borderBottom: "2px solid #000000ff",
+                  fontSize: 14,
+                  fontWeight: 600,
+                  width: 60,
+                }}
+              >
+                Qty
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {shipment?.stock_line_items?.map((item, index) => (
+              <tr key={item.id}>
+                <td
+                  style={{
+                    padding: "16px 12px",
+                    borderBottom: "1px solid #eee",
+                    fontSize: 12,
+                  }}
+                >
+                  {index + 1}
+                </td>
+                <td
+                  style={{
+                    padding: "16px 12px",
+                    borderBottom: "1px solid #eee",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 80,
+                      height: 80,
+                      background: "#f5f5f5",
+                      border: "1px solid #ddd",
+                      borderRadius: 4,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: 10,
+                      color: "#999",
+                      textAlign: "center",
+                      padding: 4,
+                    }}
+                  >
+                    <img
+                      src={
+                        item.image_url
+                          ? item.image_url
+                          : "https://via.placeholder.com/80x80?text=No+Image"
+                      }
+                      alt={item.name ?? "no_image"}
+                      style={{
+                        maxWidth: "100%",
+                        maxHeight: "100%",
+                        objectFit: "contain",
+                      }}
+                      crossOrigin="anonymous"
+                    />
+                  </div>
+                </td>
+                <td
+                  style={{
+                    padding: "16px 12px",
+                    borderBottom: "1px solid #eee",
+                    fontSize: 12,
+                  }}
+                >
+                  {item.sku?.reference ?? ""}
+                </td>
+                <td
+                  style={{
+                    padding: "16px 12px",
+                    borderBottom: "1px solid #eee",
+                    fontSize: 12,
+                  }}
+                >
+                  {item.sku_code}
+                </td>
+                <td
+                  style={{
+                    padding: "16px 12px",
+                    borderBottom: "1px solid #eee",
+                    fontSize: 12,
+                  }}
+                >
+                  {item.name}
+                </td>
+                <td
+                  style={{
+                    padding: "16px 12px",
+                    borderBottom: "1px solid #eee",
+                    fontSize: 12,
+                  }}
+                >
+                  {item.metadata?.gift_pack ? "Yes" : "No"}
+                </td>
+                <td
+                  style={{
+                    padding: "16px 12px",
+                    borderBottom: "1px solid #eee",
+                    fontSize: 12,
+                    textAlign: "center",
+                  }}
+                >
+                  {item.quantity}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {/* Summary */}
+        <div style={{ marginTop: 20, paddingTop: 20 }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              padding: "8px 12px",
+              fontSize: 12,
+            }}
+          >
+            <span>Subtotal</span>
+            <span>
+              {shipment?.order?.subtotal_amount_float
+                ? `${shipment.order.currency_code} ${shipment.order.subtotal_amount_float}`
+                : ""}
+            </span>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              padding: "8px 12px",
+              fontSize: 12,
+            }}
+          >
+            <span>Delivery</span>
+            <span>
+              {shipment?.order?.shipping_amount_float
+                ? `${shipment.order.currency_code} ${shipment.order.shipping_amount_float}`
+                : "Free"}
+            </span>
+          </div>
+          {shipment.order?.discount_amount_float ? (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                padding: "8px 12px",
+                fontSize: 12,
+              }}
+            >
+              <span>Discounts</span>
+              <span>{`-${shipment.order.currency_code} ${Math.abs(
+                shipment.order?.discount_amount_float
+              )}`}</span>
+            </div>
+          ) : (
+            ""
+          )}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              padding: "15px 12px 8px",
+              fontSize: 14,
+              borderTop: "1px solid #ccc",
+              borderBottom: "1px solid #ccc",
+              marginTop: 10,
+            }}
+          >
+            <span>
+              <span style={{ fontWeight: 600 }}>Total</span>&nbsp;(Tax Included)
+            </span>
+            <span style={{ fontWeight: 600 }}>
+              {shipment.order
+                ? `${shipment.order.currency_code} ${shipment.order.total_amount_float}`
+                : ""}
+            </span>
+          </div>
         </div>
       </div>
+    );
 
-      <table style="width:100%; border-collapse:collapse; font-size:14px;">
-        <thead>
-          <tr style="background:#f0f0f0; text-align:left;">
-            <th style="padding:10px; border:1px solid #ddd;">Image</th>
-            <th style="padding:10px; border:1px solid #ddd;">Product Code</th>
-            <th style="padding:10px; border:1px solid #ddd;">Sku Code</th>
-            <th style="padding:10px; border:1px solid #ddd;">Name</th>
-            <th style="padding:10px; border:1px solid #ddd; text-align:center;">Qty</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${rows}
-        </tbody>
-      </table>
-    </div>
-
+    const html = ReactDOMServer.renderToString(aa);
+    return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pick Sheet - Order #123456</title>
     <style>
-      td { border:1px solid #ddd; padding:8px; vertical-align:middle; }
-      td img { max-width:80px; max-height:80px; object-fit:contain; display:block; margin:auto; }
-      tr:nth-child(even) { background:#fafafa; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            padding: 20px;
+            background: white;
+            color: #000;
+            line-height: 1.4;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        
+        th {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 2px solid #ddd;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 16px 12px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+            vertical-align: middle;
+        }
+        
+        @media print {
+            body {
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 100%;
+            }
+        }
     </style>
-  `;
-    return html;
+</head>
+<body><div class="container">${html}</div>
+</body>
+</html>
+    `;
   };
 
   const handleDownloadPickSheet = async () => {

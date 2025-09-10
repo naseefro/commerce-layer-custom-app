@@ -37,7 +37,6 @@ const OrderList: FC = () => {
             countryCodes,
           }),
     });
-  console.log("FilteredList", FilteredList);
 
   const hideFiltersNav = !(
     viewTitle == null ||
