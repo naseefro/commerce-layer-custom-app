@@ -87,11 +87,10 @@ function ShipmentDetails(): React.JSX.Element {
             display: "grid",
             gridTemplateColumns: "1fr 1fr",
             gap: 40,
-            marginBottom: 10,
           }}
         >
           <div key="shipping_address" style={{ fontSize: 10 }}>
-            <h2 style={{ fontSize: 12, fontWeight: 600, marginBottom: 12 }}>
+            <h2 style={{ fontSize: 12, fontWeight: 600, marginBottom: 4 }}>
               Shipping Address
             </h2>
             <p>
@@ -106,7 +105,7 @@ function ShipmentDetails(): React.JSX.Element {
             <p>{shipment?.shipping_address?.phone}</p>
           </div>
           <div key="billing_address" style={{ fontSize: 10 }}>
-            <h2 style={{ fontSize: 12, fontWeight: 600, marginBottom: 12 }}>
+            <h2 style={{ fontSize: 12, fontWeight: 600, marginBottom: 4 }}>
               Billing Address
             </h2>
             <p>
@@ -123,14 +122,15 @@ function ShipmentDetails(): React.JSX.Element {
             <p>{shipment?.order?.billing_address?.phone}</p>
           </div>
         </div>
-        <hr style={{ border: "none", borderTop: "1px solid #eee" }} />
+        <hr
+          style={{ border: "none", borderTop: "1px solid #eee", margin: 0 }}
+        />
         {/* Order Details */}
         <div
           style={{
             display: "grid",
             gridTemplateColumns: "1fr 1fr 1fr",
             gap: 30,
-            marginTop: 10,
             marginBottom: 10,
             fontSize: 10,
           }}
@@ -159,7 +159,7 @@ function ShipmentDetails(): React.JSX.Element {
 
         {/* Delivery Note */}
         {shipment?.order?.metadata?.delivery_notes ? (
-          <div style={{ marginBottom: 10, fontSize: 10 }}>
+          <div style={{ marginBottom: 4, fontSize: 10 }}>
             <h3 style={{ fontSize: 12, fontWeight: 600, marginBottom: 8 }}>
               Delivery Note
             </h3>
@@ -180,7 +180,7 @@ function ShipmentDetails(): React.JSX.Element {
               <th
                 style={{
                   textAlign: "left",
-                  padding: "6px 4px",
+                  padding: "4px 4px",
                   borderTop: "1px solid #000000ff",
                   borderBottom: "1px solid #000000ff",
                   fontSize: 12,
@@ -193,7 +193,7 @@ function ShipmentDetails(): React.JSX.Element {
               <th
                 style={{
                   textAlign: "left",
-                  padding: "6px 4px",
+                  padding: "4px 4px",
                   borderTop: "1px solid #000000ff",
                   borderBottom: "1px solid #000000ff",
                   fontSize: 12,
@@ -206,7 +206,7 @@ function ShipmentDetails(): React.JSX.Element {
               <th
                 style={{
                   textAlign: "left",
-                  padding: "6px 4px",
+                  padding: "4px 4px",
                   borderTop: "1px solid #000000ff",
                   borderBottom: "1px solid #000000ff",
                   fontSize: 12,
@@ -219,7 +219,7 @@ function ShipmentDetails(): React.JSX.Element {
               <th
                 style={{
                   textAlign: "left",
-                  padding: "6px 4px",
+                  padding: "4px 4px",
                   borderTop: "1px solid #000000ff",
                   borderBottom: "1px solid #000000ff",
                   fontSize: 12,
@@ -231,7 +231,7 @@ function ShipmentDetails(): React.JSX.Element {
               <th
                 style={{
                   textAlign: "left",
-                  padding: "6px 4px",
+                  padding: "4px 4px",
                   borderTop: "1px solid #000000ff",
                   borderBottom: "1px solid #000000ff",
                   fontSize: 12,
@@ -243,7 +243,7 @@ function ShipmentDetails(): React.JSX.Element {
               <th
                 style={{
                   textAlign: "left",
-                  padding: "6px 4px",
+                  padding: "4px 4px",
                   borderTop: "1px solid #000000ff",
                   borderBottom: "1px solid #000000ff",
                   fontSize: 12,
@@ -256,7 +256,7 @@ function ShipmentDetails(): React.JSX.Element {
               <th
                 style={{
                   textAlign: "center",
-                  padding: "6px 4px",
+                  padding: "4px 4px",
                   borderTop: "1px solid #000000ff",
                   borderBottom: "1px solid #000000ff",
                   fontSize: 12,
@@ -273,7 +273,7 @@ function ShipmentDetails(): React.JSX.Element {
               <tr key={item.id}>
                 <td
                   style={{
-                    padding: "10px 8px",
+                    padding: "6px 4px",
                     borderBottom: "1px solid #eee",
                     fontSize: 10,
                   }}
@@ -282,7 +282,7 @@ function ShipmentDetails(): React.JSX.Element {
                 </td>
                 <td
                   style={{
-                    padding: "10px 8px",
+                    padding: "6px 4px",
                     borderBottom: "1px solid #eee",
                   }}
                 >
@@ -320,7 +320,7 @@ function ShipmentDetails(): React.JSX.Element {
                 </td>
                 <td
                   style={{
-                    padding: "10px 8px",
+                    padding: "6px 4px",
                     borderBottom: "1px solid #eee",
                     fontSize: 10,
                   }}
@@ -329,7 +329,7 @@ function ShipmentDetails(): React.JSX.Element {
                 </td>
                 <td
                   style={{
-                    padding: "10px 8px",
+                    padding: "6px 4px",
                     borderBottom: "1px solid #eee",
                     fontSize: 10,
                   }}
@@ -338,7 +338,7 @@ function ShipmentDetails(): React.JSX.Element {
                 </td>
                 <td
                   style={{
-                    padding: "10px 8px",
+                    padding: "6px 4px",
                     borderBottom: "1px solid #eee",
                     fontSize: 10,
                   }}
@@ -347,7 +347,7 @@ function ShipmentDetails(): React.JSX.Element {
                 </td>
                 <td
                   style={{
-                    padding: "10px 8px",
+                    padding: "6px 4px",
                     borderBottom: "1px solid #eee",
                     fontSize: 10,
                   }}
@@ -356,7 +356,7 @@ function ShipmentDetails(): React.JSX.Element {
                 </td>
                 <td
                   style={{
-                    padding: "10px 8px",
+                    padding: "6px 4px",
                     borderBottom: "1px solid #eee",
                     fontSize: 10,
                     textAlign: "center",
