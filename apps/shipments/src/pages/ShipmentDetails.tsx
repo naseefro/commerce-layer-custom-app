@@ -180,7 +180,7 @@ function ShipmentDetails(): React.JSX.Element {
               <th
                 style={{
                   textAlign: "left",
-                  padding: 12,
+                  padding: "6px 4px",
                   borderTop: "1px solid #000000ff",
                   borderBottom: "1px solid #000000ff",
                   fontSize: 12,
@@ -193,7 +193,7 @@ function ShipmentDetails(): React.JSX.Element {
               <th
                 style={{
                   textAlign: "left",
-                  padding: 12,
+                  padding: "6px 4px",
                   borderTop: "1px solid #000000ff",
                   borderBottom: "1px solid #000000ff",
                   fontSize: 12,
@@ -206,7 +206,7 @@ function ShipmentDetails(): React.JSX.Element {
               <th
                 style={{
                   textAlign: "left",
-                  padding: 12,
+                  padding: "6px 4px",
                   borderTop: "1px solid #000000ff",
                   borderBottom: "1px solid #000000ff",
                   fontSize: 12,
@@ -219,7 +219,7 @@ function ShipmentDetails(): React.JSX.Element {
               <th
                 style={{
                   textAlign: "left",
-                  padding: 12,
+                  padding: "6px 4px",
                   borderTop: "1px solid #000000ff",
                   borderBottom: "1px solid #000000ff",
                   fontSize: 12,
@@ -231,7 +231,7 @@ function ShipmentDetails(): React.JSX.Element {
               <th
                 style={{
                   textAlign: "left",
-                  padding: 12,
+                  padding: "6px 4px",
                   borderTop: "1px solid #000000ff",
                   borderBottom: "1px solid #000000ff",
                   fontSize: 12,
@@ -243,7 +243,7 @@ function ShipmentDetails(): React.JSX.Element {
               <th
                 style={{
                   textAlign: "left",
-                  padding: 12,
+                  padding: "6px 4px",
                   borderTop: "1px solid #000000ff",
                   borderBottom: "1px solid #000000ff",
                   fontSize: 12,
@@ -256,7 +256,7 @@ function ShipmentDetails(): React.JSX.Element {
               <th
                 style={{
                   textAlign: "center",
-                  padding: 12,
+                  padding: "6px 4px",
                   borderTop: "1px solid #000000ff",
                   borderBottom: "1px solid #000000ff",
                   fontSize: 12,
@@ -273,7 +273,7 @@ function ShipmentDetails(): React.JSX.Element {
               <tr key={item.id}>
                 <td
                   style={{
-                    padding: "16px 12px",
+                    padding: "10px 8px",
                     borderBottom: "1px solid #eee",
                     fontSize: 10,
                   }}
@@ -282,14 +282,14 @@ function ShipmentDetails(): React.JSX.Element {
                 </td>
                 <td
                   style={{
-                    padding: "16px 12px",
+                    padding: "10px 8px",
                     borderBottom: "1px solid #eee",
                   }}
                 >
                   <div
                     style={{
-                      width: 80,
-                      height: 80,
+                      width: 50,
+                      height: 50,
                       background: "#f5f5f5",
                       border: "1px solid #ddd",
                       borderRadius: 4,
@@ -320,7 +320,7 @@ function ShipmentDetails(): React.JSX.Element {
                 </td>
                 <td
                   style={{
-                    padding: "16px 12px",
+                    padding: "10px 8px",
                     borderBottom: "1px solid #eee",
                     fontSize: 10,
                   }}
@@ -329,7 +329,7 @@ function ShipmentDetails(): React.JSX.Element {
                 </td>
                 <td
                   style={{
-                    padding: "16px 12px",
+                    padding: "10px 8px",
                     borderBottom: "1px solid #eee",
                     fontSize: 10,
                   }}
@@ -338,7 +338,7 @@ function ShipmentDetails(): React.JSX.Element {
                 </td>
                 <td
                   style={{
-                    padding: "16px 12px",
+                    padding: "10px 8px",
                     borderBottom: "1px solid #eee",
                     fontSize: 10,
                   }}
@@ -347,7 +347,7 @@ function ShipmentDetails(): React.JSX.Element {
                 </td>
                 <td
                   style={{
-                    padding: "16px 12px",
+                    padding: "10px 8px",
                     borderBottom: "1px solid #eee",
                     fontSize: 10,
                   }}
@@ -356,7 +356,7 @@ function ShipmentDetails(): React.JSX.Element {
                 </td>
                 <td
                   style={{
-                    padding: "16px 12px",
+                    padding: "10px 8px",
                     borderBottom: "1px solid #eee",
                     fontSize: 10,
                     textAlign: "center",
@@ -441,86 +441,7 @@ function ShipmentDetails(): React.JSX.Element {
       </div>
     );
 
-    const html = ReactDOMServer.renderToString(body);
-    return `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pick Sheet - Order #${shipment.order?.number || "Unknown"}</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-            background: white;
-            color: #000;
-            line-height: 1.4;
-        }
-        
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 30px;
-        }
-        
-        th {
-            text-align: left;
-            padding: 12px;
-            border-bottom: 2px solid #ddd;
-            font-size: 14px;
-            font-weight: 600;
-        }
-        
-        td {
-            padding: 16px 12px;
-            border-bottom: 1px solid #eee;
-            font-size: 14px;
-            vertical-align: middle;
-        }
-        
-        @media print {
-            body {
-                padding: 20px;
-            }
-            
-            .container {
-                max-width: 100%;
-            }
-            
-            @page {
-                margin: 0.5in;
-                @top-left {
-                    content: "Pick Sheet - Order #${
-                      shipment.order?.number || "Unknown"
-                    }";
-                    font-size: 10px;
-                    font-weight: bold;
-                }
-                @top-right {
-                    content: "Page " counter(page) " of " counter(pages);
-                    font-size: 10px;
-                }
-                
-            }
-        }
-    </style>
-</head>
-<body><div class="container">${html}</div>
-</body>
-</html>
-    `;
+    return ReactDOMServer.renderToString(body);
   };
   const handleDownloadPickSheet = async () => {
     if (!shipment || isGeneratingPDF) return;
